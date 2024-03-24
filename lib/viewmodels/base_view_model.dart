@@ -16,9 +16,9 @@ class BaseViewModel extends ChangeNotifier{
   bool get DataLoaded => _dataLoaded;
   set DataLoaded(bool value) => _dataLoaded = value;
 
-  bool _errorState = false;
-  bool get ErrorState => _errorState;
-  set ErrorState(bool value) => _errorState = value;
+  bool _iserrorState = false;
+  bool get IsErrorState => _iserrorState;
+  set IsErrorState(bool value) => _iserrorState = value;
 
   String _errorMessage = "";
   String get ErrorMessage => _errorMessage;
@@ -29,7 +29,7 @@ class BaseViewModel extends ChangeNotifier{
       _isBusy = true;
       _dataLoaded = false;
       _errorMessage = "";
-      _errorState = false;
+      _iserrorState = false;
     }
     else{
       _loadingText = "";

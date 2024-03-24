@@ -5,6 +5,7 @@ import 'package:batman/viewmodels/base_view_model.dart';
 
 class StartPageViewModel extends BaseViewModel{
   final YoutubeApiService _apiService = YoutubeApiService();
+  bool isLoadingMore = false;
   String _nextToken = "";
   String _searchTerm = "";
   List<YoutubeVideo> _youtubeVideos = [];
@@ -21,11 +22,12 @@ class StartPageViewModel extends BaseViewModel{
     try{
       // search for youtube videos
       await Future.delayed(const Duration(seconds: 10));
+      DataLoaded = true;
       await _getYoutubeVideos();
     }
     catch(ex){
-      ErrorState = true;
-      ErrorMessage = "Something went wrong. If problem persists, please contact admin at ${Constants.authorEmail}";
+      IsErrorState = true;
+      ErrorMessage = "${ex.toString()}. If problem persists, please contact admin at ${Constants.authorEmail}";
     }
     finally{
       setDataLoadingIndicators(isStarting: false);
@@ -36,8 +38,32 @@ class StartPageViewModel extends BaseViewModel{
   Future<void> _getYoutubeVideos() async{
     // search the videos
     var videoSearchResults = await _apiService.searchVideos(_searchTerm, nextPageToken: _nextToken);
+    var channelIDs = videoSearchResults.items!.map((video) =>
+        video.snippet!.channelId
+    ).join(",");
+    var channelSearchResults = await _apiService.getChannels(channelIDs);
+    videoSearchResults.items?.forEach((video) {
+      video.snippet!.channelImageUrl = channelSearchResults.items!
+      .where((channel) => channel.id == video.snippet!.channelId)
+      .first.snippet!.thumbnails!.medium!.url!;
+    });
     _nextToken = videoSearchResults.nextPageToken!;
     _youtubeVideos.addAll(videoSearchResults.items!);
   }
 
+
+  Future<void> queryForVideos(String searchQuery) async{
+    _nextToken = "";
+    _searchTerm = searchQuery.trim();
+    await searchVideos();
+  }
+
+  Future<void> loadMoreVideos() async{
+    if(this.isLoadingMore || _nextToken.isEmpty){ return; };
+    this.isLoadingMore = true;
+    notifyListeners();
+    await _getYoutubeVideos();
+    this.isLoadingMore = false;
+    notifyListeners();
+  }
 }
