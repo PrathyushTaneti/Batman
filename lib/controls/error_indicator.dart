@@ -2,9 +2,8 @@ import 'package:batman/styles/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class ErrorIndicator extends StatelessWidget {
-  const ErrorIndicator({
-    super.key,
-  });
+  final String errorText;
+  const ErrorIndicator({ required this.errorText });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,8 @@ class ErrorIndicator extends StatelessWidget {
               Text("Uh-ho!",
                 style: kMediumLightText18,),
               SizedBox(height: 12,),
-              Text('Error Message. Please contact admin',
+              Text(
+                errorText,
                 style: kRegularLightText14,
                 textAlign: TextAlign.center,)
             ],
