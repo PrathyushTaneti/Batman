@@ -1,7 +1,6 @@
 # Youtube Clone Application
 
-This Flutter application is a clone of the popular video-sharing platform YouTube. It leverages the Google Developer API to fetch video data, enabling users to browse, search, and watch YouTube videos directly within the app. Additionally, the app incorporates several advanced features to enhance user experience, including caching API data, implementing infinite scrolling, and providing seamless video playback functionality.
-
+This Flutter application is a clone of the popular video-sharing platform YouTube. It leverages the Google Developer API to fetch video data, enabling users to browse, search, and watch YouTube videos directly within the app. 
 
 ## Features
 
